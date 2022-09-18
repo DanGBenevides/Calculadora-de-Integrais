@@ -1,52 +1,73 @@
+// Classe responsável por fazer as operações
 class operacoes {
-    riemann(start, finish, funcao, n)
+    riemann(start, finish, funcao, n) // Função que calcula a soma de Riemann
     {
-        var tamanho = (finish - start);
-        var resultado = 0.0;
-        var h = 0.0;
-        var div = tamanho / n;
-        var pos = start + div;
-        for (let i = 0; i < n; i++)
+        var tamanho = (finish - start); // Tamanho do intervalo
+        var resultado = 0.0; // Declaração da variável resultado
+        var h = 0.0; // Declaração da variável h (altura)
+        var div = tamanho / n; // Divisão do tamanho do intervalo pelo número de retângulos
+        var pos = start + div; // Posição do primeiro retângulo
+        for (let i = 0; i < n; i++) // Loop para calcular a soma de Riemann
         {
-            h = funcao.calcular(pos);
-            pos += div;
-            resultado += h * div;
+            h = funcao.calcular(pos); // Calcula a altura do retângulo
+            pos += div; // Incrementa a posição do retângulo
+            resultado += h * div; // Calcula a área do retângulo e soma ao resultado
         }
         return resultado;
     }
 }
+
+// Essa classe é responsável por pegar a função e calcular a mesma, substituindo as variáveis
 class Funcao {
-    calcular(x)
-    {
-        var funcao = document.getElementById("funcao").value;
-        if (funcao.includes("dx")) {
-            funcao = funcao.replace("dx", "");
+    calcular(x) { // Função que resolve a função digitada
+        var funcao = document.getElementById("funcao").value; // Pega a função digitada
+        if (funcao.includes("dx")) { // Verifica se a função tem dx
+            funcao = funcao.replace("dx", ""); // Remove dx da função, para ser capaz de calcular
         }
-        var e = nerdamer(funcao, {x: x}).evaluate()
+        if (funcao.includes("sen")) { // Verifica se a função tem sen
+            funcao = funcao.replace("sen", "sin"); // Substitui sen por sin, para ser capaz de calcular
+        }
+        if (funcao.includes("ln")) { // Verifica se a função tem ln
+            funcao = funcao.replace("ln", "log"); // Substitui ln por log, para ser capaz de calcular
+        }
+        var e = nerdamer(funcao, {x: x}).evaluate() // Calcula a função
         return e
     }
 }
 
-var calcular = document.getElementById("calcular");
-calcular.addEventListener("click", function () {
-    var start = document.getElementById("limite-inf").value;
-    var finish = document.getElementById("limite-sup").value;
-    if(start.includes("pi")) {
-        // start = start.replace("pi", "3.14159265359");
-        start = nerdamer(start, {pi: 3.14159265359}).evaluate()
+var calcular = document.getElementById("calcular"); // Pega o botão calcular
+calcular.addEventListener("click", function () { // Adiciona um evento de click no botão
+    var start = document.getElementById("limite-inf").value; // Pega o limite inferior
+    var finish = document.getElementById("limite-sup").value; // Pega o limite superior
+    if(start.includes("pi")) { // Verifica se o limite inferior tem pi
+        start = nerdamer(start, {pi: 3.14159265359}).evaluate() // Substitui pi por 3.14159265359
+    } else if (start.includes("ln")) { // Verifica se o limite inferior tem ln
+        start = start.replace("ln", ""); // Remove ln do limite inferior
+        start = parseFloat(start); // Converte o limite inferior para float
+        start = Math.log2(start); // Calcula o ln do limite inferior
+    } else {
+        start = parseFloat(start); // Converte o limite inferior para float
     }
-    else {
-        start = parseFloat(start);
+
+    if (finish.includes("pi")) { // Verifica se o limite superior tem pi
+        finish = nerdamer(finish, {pi: 3.14159265359}).evaluate() // Substitui pi por 3.14159265359
+    } else if (finish.includes("ln")) { // Verifica se o limite superior tem ln
+        finish = nerdamer(finish).evaluate() // Calcula o ln do limite superior
+    } else {
+        finish = parseFloat(finish); // Converte o limite superior para float
     }
-    if (finish.includes("pi")) {
-        // finish = finish.replace("pi", "3.14159265359");
-        finish = nerdamer(finish, {pi: 3.14159265359}).evaluate()
-    }
-    else {
-        finish = parseFloat(finish);
-    }
-    var n = 1000;
-    var op = new operacoes();
-    var f = new Funcao();
-    alert(op.riemann(start, finish, f, n));
+
+    var n = document.getElementById("n").value; // Pega o número de retângulos
+    var op = new operacoes(); // Cria um objeto da classe operacoes
+    var f = new Funcao(); // Cria um objeto da classe Funcao
+    var resultado = document.getElementById("res"); 
+    resultado.innerHTML = " " + op.riemann(start, finish, f, n);
 });
+
+var limpar = document.getElementById("limpar"); 
+limpar.addEventListener("click", function () { 
+    var resultado = document.getElementById("res");
+    resultado.innerHTML = "";
+});
+
+
