@@ -21,6 +21,7 @@ class operacoes {
 class Funcao {
     calcular(x) { // Função que resolve a função digitada
         var funcao = document.getElementById("funcao").value; // Pega a função digitada
+        funcao = funcao.toLowerCase(); // Transforma a função em minúsculo
         if (funcao.includes("dx")) { // Verifica se a função tem dx
             funcao = funcao.replace("dx", ""); // Remove dx da função, para ser capaz de calcular
         }
@@ -44,7 +45,7 @@ calcular.addEventListener("click", function () { // Adiciona um evento de click 
     } else if (start.includes("ln")) { // Verifica se o limite inferior tem ln
         start = start.replace("ln", ""); // Remove ln do limite inferior
         start = parseFloat(start); // Converte o limite inferior para float
-        start = Math.log2(start); // Calcula o ln do limite inferior
+        start = Math.log(start); // Calcula o ln do limite inferior
     } else {
         start = parseFloat(start); // Converte o limite inferior para float
     }
@@ -69,5 +70,3 @@ limpar.addEventListener("click", function () {
     var resultado = document.getElementById("res");
     resultado.innerHTML = "";
 });
-
-
