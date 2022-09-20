@@ -61,12 +61,25 @@ calcular.addEventListener("click", function () { // Adiciona um evento de click 
     var n = document.getElementById("n").value; // Pega o número de retângulos
     var op = new operacoes(); // Cria um objeto da classe operacoes
     var f = new Funcao(); // Cria um objeto da classe Funcao
-    var resultado = document.getElementById("res"); 
-    resultado.innerHTML = " " + op.riemann(start, finish, f, n);
+    var resultado = document.getElementById("res");
+    var calculo = op.riemann(start, finish, f, n); // Calcula a soma de Riemann
+    if (calculo < 0) calculo = calculo * -1;
+    resultado.innerHTML = " " + calculo;
 });
 
 var limpar = document.getElementById("limpar"); 
 limpar.addEventListener("click", function () { 
-    var resultado = document.getElementById("res");
+    let resultado = document.getElementById("res");
+    let funcao = document.getElementById("funcao");
+    let limiteInf = document.getElementById("limite-inf");
+    let limiteSup = document.getElementById("limite-sup");
+    let n = document.getElementById("n");
+
     resultado.innerHTML = "";
+    funcao.value = "";
+    limiteInf.value = "";
+    limiteSup.value = "";
+    n.value = "";
 });
+
+
